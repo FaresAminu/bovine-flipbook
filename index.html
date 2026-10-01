@@ -111,10 +111,12 @@ body{
    STAGE & BOOK
    ============================================================ */
 .scene{
-  position:fixed;inset:0;z-index:10;
+  position:fixed;
+  top:70px; bottom:88px; left:0; right:0;
+  z-index:10;
   display:grid;place-items:center;
   perspective:3000px;
-  perspective-origin:50% 48%;
+  perspective-origin:50% 50%;
 }
 .book{
   position:relative;
@@ -869,9 +871,10 @@ function playFlipSound(forward){
    ============================================================ */
 const BW = 960, BH = 680;
 function fit(){
-  const vw = window.innerWidth;
-  const vh = window.innerHeight;
-  const s = Math.min((vw * 0.94) / BW, (vh * 0.80) / BH, 1.34);
+  const r  = scene.getBoundingClientRect();
+  const vw = r.width;
+  const vh = r.height;
+  const s  = Math.min((vw * 0.96) / BW, (vh * 0.98) / BH, 1.34);
   document.documentElement.style.setProperty('--s', s.toFixed(3));
 
   const hint = document.getElementById('rotateHint');
@@ -888,8 +891,8 @@ let tx = 0, ty = 0, cx = 0, cy = 0;
 window.addEventListener('pointermove', e => {
   const nx = (e.clientX / window.innerWidth  - 0.5) * 2;
   const ny = (e.clientY / window.innerHeight - 0.5) * 2;
-  tx =  nx * 5.5;
-  ty = -ny * 4.0;
+  tx =  nx * 3.0;
+ty = -ny * 2.2;
 });
 
 (function loop(){
