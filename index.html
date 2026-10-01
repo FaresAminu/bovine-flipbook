@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Chapter I — Introduction to Bovine Production</title>
+<title>Bovine Production — Chapters I &amp; II · Dr. Fares Mohamed Amine</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;}
-html,body{width:100%;height:100%;margin:0;overflow:hidden;}
+html,body{height:100%;margin:0;overflow:hidden;}
 body{
   font-family:'Inter','Helvetica Neue',Helvetica,Arial,sans-serif;
   color:#dfe7f0;
@@ -27,11 +27,7 @@ body{
 @keyframes drift2{50%{transform:translate3d(-80px,-60px,0) scale(1.12);}}
 #dust{position:fixed;inset:0;z-index:1;pointer-events:none;}
 
-.topbar{
-  position:fixed;top:0;left:0;right:0;z-index:60;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:14px 20px;pointer-events:none;
-}
+.topbar{position:fixed;top:0;left:0;right:0;z-index:60;display:flex;align-items:center;justify-content:space-between;padding:14px 20px;pointer-events:none;}
 .brand{display:flex;align-items:center;gap:11px;font-size:10px;letter-spacing:3.2px;text-transform:uppercase;color:#8fa5bf;font-weight:500;}
 .brand .dot{width:7px;height:7px;border-radius:50%;background:linear-gradient(140deg,#f0dc9a,#c9a227);box-shadow:0 0 14px rgba(201,162,39,.85);}
 .tools{display:flex;gap:10px;pointer-events:auto;}
@@ -53,107 +49,150 @@ body{
 
 .scene{
   position:fixed;inset:0;z-index:10;
-  display:flex;align-items:center;justify-content:center;
+  display:grid;
+  place-items:center start;
+  padding-left:20px;
   overflow:hidden;
-  perspective:2400px;perspective-origin:50% 50%;
-  padding:52px 14px 76px;
-  touch-action:pan-y;
+  perspective:3000px;
+  perspective-origin:42% 50%;
 }
 .book{
   position:relative;width:960px;height:680px;
-  flex:0 0 auto;
-  transform-origin:center center;
   transform-style:preserve-3d;
   transform:scale(var(--s,1)) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));
-  transition:transform .18s linear;
-  animation:bookIn 1.0s cubic-bezier(.19,1,.22,1) both;
+  transition:transform .12s linear;
+  animation:bookIn 1.4s cubic-bezier(.19,1,.22,1) both;
 }
-@keyframes bookIn{
-  0%{opacity:0;transform:scale(calc(var(--s,1)*.92)) translateY(28px);}
-  100%{opacity:1;transform:scale(var(--s,1));}
-}
+@keyframes bookIn{0%{opacity:0;transform:scale(calc(var(--s,1)*.82)) rotateX(18deg) rotateY(-24deg) translateY(60px);}100%{opacity:1;}}
 .book::after{content:'';position:absolute;left:3%;right:3%;bottom:-46px;height:60px;background:radial-gradient(ellipse at 50% 50%, rgba(0,0,0,.72), transparent 72%);filter:blur(14px);z-index:-1;}
 
-.base{position:absolute;top:0;width:50%;height:100%;z-index:0;background:linear-gradient(135deg,#16304e 0%,#0d1d31 55%,#091522 100%);border:1px solid rgba(201,162,39,.20);}
+.base{position:absolute;top:0;width:480px;height:100%;z-index:0;background:linear-gradient(135deg,#16304e 0%,#0d1d31 55%,#091522 100%);border:1px solid rgba(201,162,39,.20);}
 .base.left{left:0;border-radius:6px 0 0 6px;box-shadow:inset -26px 0 48px -20px rgba(0,0,0,.85), 0 30px 70px -22px rgba(0,0,0,.85);}
-.base.right{left:50%;border-radius:0 6px 6px 0;box-shadow:inset 26px 0 48px -20px rgba(0,0,0,.85), 0 30px 70px -22px rgba(0,0,0,.85);}
+.base.right{left:480px;border-radius:0 6px 6px 0;box-shadow:inset 26px 0 48px -20px rgba(0,0,0,.85), 0 30px 70px -22px rgba(0,0,0,.85);}
 
-.leaf{position:absolute;top:0;left:50%;width:50%;height:100%;transform-origin:left center;transform-style:preserve-3d;transition:transform .92s cubic-bezier(.645,.045,.355,1);will-change:transform;}
+.leaf{position:absolute;top:0;left:480px;width:480px;height:100%;transform-origin:left center;transform-style:preserve-3d;transition:transform .92s cubic-bezier(.645,.045,.355,1);will-change:transform;}
 .leaf.flipped{transform:rotateY(-180deg);}
 
 .face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden;border-radius:2px;}
 .face.back{transform:rotateY(180deg);}
 
-.page{background:linear-gradient(180deg,#fffdf9 0%,#fbf6ec 55%,#f4ecdd 100%);display:flex;flex-direction:column;padding:40px 44px 46px;}
+.page{background:linear-gradient(180deg,#fffdf9 0%,#fbf6ec 55%,#f4ecdd 100%);display:flex;flex-direction:column;padding:34px 38px 40px;}
 .page::after{content:'';position:absolute;inset:0;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.42'/%3E%3C/svg%3E");opacity:.30;mix-blend-mode:multiply;}
 .face.front.page{box-shadow:inset 30px 0 44px -26px rgba(30,58,95,.34), inset 0 0 0 1px rgba(0,0,0,.05);}
 .face.back.page{box-shadow:inset -30px 0 44px -26px rgba(30,58,95,.34), inset 0 0 0 1px rgba(0,0,0,.05);}
 
-.run-head{display:flex;justify-content:space-between;align-items:center;font-size:9.5px;letter-spacing:2.6px;text-transform:uppercase;color:#93a3b4;padding-bottom:9px;margin-bottom:22px;border-bottom:1px solid #e3dccd;position:relative;z-index:2;}
-.run-head::after{content:'';position:absolute;bottom:-1px;left:0;width:56px;height:1px;background:#c9a227;}
+.run-head{display:flex;justify-content:space-between;align-items:center;font-size:9px;letter-spacing:2.4px;text-transform:uppercase;color:#93a3b4;padding-bottom:8px;margin-bottom:16px;border-bottom:1px solid #e3dccd;position:relative;z-index:2;}
+.run-head::after{content:'';position:absolute;bottom:-1px;left:0;width:50px;height:1px;background:#c9a227;}
 
-.page-foot{position:absolute;bottom:16px;left:0;right:0;text-align:center;z-index:2;font-family:'Cormorant Garamond',Georgia,serif;font-size:13px;letter-spacing:2px;color:#9aa8b6;}
+.page-foot{position:absolute;bottom:14px;left:0;right:0;text-align:center;z-index:2;font-family:'Cormorant Garamond',Georgia,serif;font-size:12px;letter-spacing:2px;color:#9aa8b6;}
 .page-foot .pnum{display:inline-flex;align-items:center;gap:12px;}
-.page-foot .pnum::before,.page-foot .pnum::after{content:'';width:26px;height:1px;background:#ddd5c5;}
+.page-foot .pnum::before,.page-foot .pnum::after{content:'';width:22px;height:1px;background:#ddd5c5;}
 
 .page-body{flex:1;position:relative;z-index:2;}
 
-.chapter-num{font-family:'Cormorant Garamond',Georgia,serif;font-size:78px;line-height:.85;color:#e6dcc6;margin:2px 0 -12px;font-weight:600;}
-.p-title{font-family:'Cormorant Garamond',Georgia,serif;font-size:33px;line-height:1.14;color:#16304e;margin:0 0 10px;font-weight:700;letter-spacing:-.4px;}
-.p-sub{font-size:10.5px;letter-spacing:3.4px;text-transform:uppercase;color:#8b9bab;margin:0 0 20px;font-weight:500;}
-.p-rule{display:flex;align-items:center;gap:12px;margin:0 0 24px;color:#c9a227;}
+.chapter-num{font-family:'Cormorant Garamond',Georgia,serif;font-size:70px;line-height:.85;color:#e6dcc6;margin:0 0 -10px;font-weight:600;}
+.p-title{font-family:'Cormorant Garamond',Georgia,serif;font-size:28px;line-height:1.14;color:#16304e;margin:0 0 8px;font-weight:700;letter-spacing:-.4px;}
+.p-sub{font-size:10px;letter-spacing:3.2px;text-transform:uppercase;color:#8b9bab;margin:0 0 16px;font-weight:500;}
+.p-rule{display:flex;align-items:center;gap:12px;margin:0 0 18px;color:#c9a227;}
 .p-rule::before,.p-rule::after{content:'';height:1px;background:linear-gradient(90deg,transparent,#d8ceb6,transparent);flex:1;}
 .p-rule span{font-size:11px;}
 
-.abstract{background:linear-gradient(180deg,#f7f3ea,#f1ebdd);border-left:4px solid #1e3a5f;padding:20px 22px;position:relative;box-shadow:0 1px 3px rgba(0,0,0,.05);}
+.abstract{background:linear-gradient(180deg,#f7f3ea,#f1ebdd);border-left:4px solid #1e3a5f;padding:16px 18px;position:relative;box-shadow:0 1px 3px rgba(0,0,0,.05);}
 .abstract::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#1e3a5f,transparent);}
-.abstract p{margin:0;font-size:13.2px;line-height:1.78;color:#33404e;}
-.abstract strong{font-family:'Cormorant Garamond',Georgia,serif;font-size:16px;color:#16304e;font-weight:700;}
+.abstract p{margin:0;font-size:12.4px;line-height:1.72;color:#33404e;}
+.abstract strong{font-family:'Cormorant Garamond',Georgia,serif;font-size:15px;color:#16304e;font-weight:700;}
 
-.sec-title{font-family:'Cormorant Garamond',Georgia,serif;font-size:25px;color:#16304e;margin:0 0 8px;font-weight:700;letter-spacing:-.2px;line-height:1.2;}
-.sec-rule{width:64px;height:2px;background:linear-gradient(90deg,#c9a227,#e8cf7a);margin:0 0 26px;}
+.sec-title{font-family:'Cormorant Garamond',Georgia,serif;font-size:22px;color:#16304e;margin:0 0 6px;font-weight:700;letter-spacing:-.2px;line-height:1.2;}
+.sec-rule{width:56px;height:2px;background:linear-gradient(90deg,#c9a227,#e8cf7a);margin:0 0 16px;}
 
-.card{position:relative;background:#fff;border:1px solid #e5ded0;border-left:3px solid #1e3a5f;padding:16px 18px 16px 20px;margin-top:24px;box-shadow:0 2px 6px rgba(30,58,95,.06);transition:transform .3s, box-shadow .3s;}
-.card:hover{transform:translateX(4px);box-shadow:0 6px 18px rgba(30,58,95,.13);}
-.card-num{position:absolute;top:-14px;left:14px;width:28px;height:28px;border-radius:50%;background:linear-gradient(140deg,#2a4d78,#16304e);color:#f3e6bd;font-family:'Cormorant Garamond',Georgia,serif;font-size:15px;font-weight:700;display:grid;place-items:center;box-shadow:0 3px 8px rgba(30,58,95,.4);border:1px solid rgba(201,162,39,.45);}
-.card h3{font-family:'Cormorant Garamond',Georgia,serif;font-size:18px;color:#16304e;margin:6px 0 8px;font-weight:700;letter-spacing:.1px;}
-.card p{font-size:12.4px;line-height:1.66;color:#41505f;margin:0;}
+.card{position:relative;background:#fff;border:1px solid #e5ded0;border-left:3px solid #1e3a5f;padding:14px 16px 14px 18px;margin-top:20px;box-shadow:0 2px 6px rgba(30,58,95,.06);transition:transform .3s, box-shadow .3s;}
+.card.compact{padding:12px 14px 12px 16px;margin-top:12px;}
+.card:hover{transform:translateX(3px);box-shadow:0 6px 18px rgba(30,58,95,.13);}
+.card-num{position:absolute;top:-12px;left:12px;width:24px;height:24px;border-radius:50%;background:linear-gradient(140deg,#2a4d78,#16304e);color:#f3e6bd;font-family:'Cormorant Garamond',Georgia,serif;font-size:13px;font-weight:700;display:grid;place-items:center;box-shadow:0 3px 8px rgba(30,58,95,.4);border:1px solid rgba(201,162,39,.45);}
+.card h3{font-family:'Cormorant Garamond',Georgia,serif;font-size:16px;color:#16304e;margin:4px 0 6px;font-weight:700;letter-spacing:.1px;}
+.card p{font-size:11.4px;line-height:1.6;color:#41505f;margin:0;}
 .card p strong{color:#0d2136;font-weight:600;}
 
-.pullquote{margin-top:26px;padding:18px 20px;border-top:1px solid #e3dccd;border-bottom:1px solid #e3dccd;text-align:center;}
-.pullquote p{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:17px;line-height:1.5;color:#5a6b7c;margin:0;}
-.pullquote span{display:block;margin-top:8px;font-size:9px;letter-spacing:2.6px;text-transform:uppercase;color:#b0a78f;font-style:normal;font-family:'Inter',sans-serif;}
+.pullquote{margin-top:20px;padding:14px 18px;border-top:1px solid #e3dccd;border-bottom:1px solid #e3dccd;text-align:center;}
+.pullquote p{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:14.5px;line-height:1.5;color:#5a6b7c;margin:0;}
+.pullquote span{display:block;margin-top:6px;font-size:8.5px;letter-spacing:2.4px;text-transform:uppercase;color:#b0a78f;font-style:normal;font-family:'Inter',sans-serif;}
 
-.closing{margin-top:26px;background:#16304e;color:#cddbe8;padding:20px 22px;font-size:12.4px;line-height:1.72;border-top:3px solid #c9a227;}
+.closing{margin-top:18px;background:#16304e;color:#cddbe8;padding:16px 18px;font-size:11.4px;line-height:1.66;border-top:3px solid #c9a227;}
 .closing strong{color:#f0dc9a;font-weight:600;}
 
 .takeaways{list-style:none;margin:0;padding:0;}
-.takeaways li{position:relative;padding-left:30px;margin-bottom:18px;font-size:12.8px;line-height:1.68;color:#3a4756;}
-.takeaways li::before{content:'';position:absolute;left:6px;top:7px;width:9px;height:9px;transform:rotate(45deg);background:linear-gradient(140deg,#e8cf7a,#c9a227);box-shadow:0 0 0 3px rgba(201,162,39,.14);}
+.takeaways li{position:relative;padding-left:26px;margin-bottom:12px;font-size:11.4px;line-height:1.6;color:#3a4756;}
+.takeaways li::before{content:'';position:absolute;left:5px;top:6px;width:8px;height:8px;transform:rotate(45deg);background:linear-gradient(140deg,#e8cf7a,#c9a227);box-shadow:0 0 0 3px rgba(201,162,39,.14);}
 .takeaways li strong{color:#16304e;font-weight:600;}
 
+.mini-list{list-style:none;margin:6px 0 0 0;padding:0;}
+.mini-list li{position:relative;padding-left:14px;margin-bottom:3px;font-size:10.6px;line-height:1.48;color:#465563;}
+.mini-list li::before{content:'—';position:absolute;left:0;top:0;color:#c9a227;font-weight:700;}
+.mini-list li b,.mini-list li strong{color:#16304e;font-weight:600;}
+
+.dual-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;}
+.dual-col{background:#fff;border:1px solid #e5ded0;border-top:3px solid #1e3a5f;padding:11px 12px;}
+.dual-col.dairy{border-top-color:#2c527f;}
+.dual-col.beef{border-top-color:#8b3a2a;}
+.dual-col h4{font-family:'Cormorant Garamond',Georgia,serif;font-size:15px;color:#16304e;margin:0 0 2px;font-weight:700;}
+.dual-col .ex{display:block;font-size:8.5px;letter-spacing:2px;text-transform:uppercase;color:#8b9bab;margin-bottom:8px;}
+.dual-col ul{list-style:none;margin:0;padding:0;}
+.dual-col li{font-size:10.2px;line-height:1.45;color:#465563;padding:2.5px 0;border-bottom:1px dotted #ece3d2;}
+.dual-col li:last-child{border-bottom:none;}
+.dual-col li span{color:#8b9bab;font-weight:500;display:inline-block;min-width:52px;}
+
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-top:8px;}
+.mini-card{background:#fff;border:1px solid #e5ded0;border-top:2px solid #c9a227;padding:9px 10px;}
+.mini-card h4{font-family:'Cormorant Garamond',Georgia,serif;font-size:13.5px;color:#16304e;margin:0 0 3px;font-weight:700;line-height:1.15;}
+.mini-card p{font-size:9.8px;line-height:1.42;color:#465563;margin:0 0 5px;}
+.mini-card span{display:block;font-size:8.5px;letter-spacing:1.2px;text-transform:uppercase;color:#b8963a;font-weight:600;}
+
+.small-sub{font-size:9.5px;letter-spacing:1.8px;text-transform:uppercase;color:#8b9bab;margin:-2px 0 8px;font-weight:500;}
+
+.note{margin-top:10px;padding:9px 12px;background:#f8f3e7;border-left:3px solid #c9a227;font-size:10.4px;line-height:1.5;color:#4a5966;font-style:italic;}
+
+.correct-list{margin-top:8px;padding:8px 12px;background:#eef5ec;border-left:3px solid #4a7d43;font-size:10.4px;line-height:1.5;color:#3d5a38;}
+.correct-list b{color:#2d4a26;}
+.fault-list{margin-top:8px;padding:8px 12px;background:#fbf0ec;border-left:3px solid #a04a2a;font-size:10.4px;line-height:1.5;color:#6a3420;}
+.fault-list b{color:#5a2410;}
+
+/* ============ COVER — WITH AUTHOR ============ */
 .cover{background:radial-gradient(120% 90% at 50% 0%, #23456e 0%, #14293f 45%, #0a1727 100%);padding:0;box-shadow:inset 0 0 0 1px rgba(201,162,39,.28), inset 0 0 90px rgba(0,0,0,.6);}
 .cover::before{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(115deg, rgba(255,255,255,.022) 0 2px, transparent 2px 5px),radial-gradient(60% 40% at 30% 15%, rgba(255,255,255,.10), transparent 60%);}
-.cover-frame{position:absolute;inset:22px;border:1px solid rgba(201,162,39,.42);display:flex;align-items:center;justify-content:center;padding:26px 22px;}
+.cover-frame{position:absolute;inset:16px;border:1px solid rgba(201,162,39,.42);display:flex;align-items:center;justify-content:center;padding:18px 22px;}
 .cover-frame::before{content:'';position:absolute;inset:6px;border:1px solid rgba(201,162,39,.16);}
-.cover-content{text-align:center;position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;}
-.cover-kicker{font-size:10px;letter-spacing:5.5px;text-transform:uppercase;color:#9db2c8;margin:0 0 20px;font-weight:500;}
-.cover-line{width:80px;height:1px;background:linear-gradient(90deg,transparent,#c9a227,transparent);margin:0 auto 20px;}
-.cover-line.short{width:44px;margin:16px auto 20px;}
-.cover-title{font-family:'Cormorant Garamond',Georgia,serif;font-size:62px;line-height:1;margin:0;font-weight:700;letter-spacing:1px;background:linear-gradient(175deg,#fbf1c4 0%,#e8cf7a 32%,#b8901c 52%,#e8cf7a 72%,#fbf1c4 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 2px 3px rgba(0,0,0,.5));}
-.cover-main{font-family:'Cormorant Garamond',Georgia,serif;font-size:19px;line-height:1.35;color:#e6eef7;margin:14px 0 0;font-weight:400;max-width:300px;letter-spacing:.3px;}
-.cover-sub{font-size:9.5px;letter-spacing:3.6px;text-transform:uppercase;color:#8fa8c2;line-height:2;margin:0;font-weight:400;}
-.orn{width:104px;height:104px;color:#c9a227;margin:26px 0 22px;opacity:.9;animation:ornSpin 34s linear infinite;}
-@keyframes ornSpin{to{transform:rotate(360deg);}}
-.cover-foot{font-size:9px;letter-spacing:3.2px;text-transform:uppercase;color:#7c93ab;margin:0;}
+.cover-content{text-align:center;position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;width:100%;}
 
+.cover-ministry{font-size:7.5px;letter-spacing:2.4px;text-transform:uppercase;color:#7e96ae;line-height:1.7;margin:0 0 6px;font-weight:500;}
+.cover-school{font-size:9px;letter-spacing:3.2px;text-transform:uppercase;color:#a7bcd1;line-height:1.6;margin:0 0 14px;font-weight:600;}
+.cover-line{width:80px;height:1px;background:linear-gradient(90deg,transparent,#c9a227,transparent);margin:0 auto 12px;}
+.cover-line.short{width:44px;margin:12px auto 12px;}
+
+.cover-course{font-family:'Cormorant Garamond',Georgia,serif;font-size:15px;font-style:italic;color:#c9a227;margin:0 0 6px;letter-spacing:.5px;}
+
+.cover-title{font-family:'Cormorant Garamond',Georgia,serif;font-size:46px;line-height:1;margin:0;font-weight:700;letter-spacing:1px;background:linear-gradient(175deg,#fbf1c4 0%,#e8cf7a 32%,#b8901c 52%,#e8cf7a 72%,#fbf1c4 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 2px 3px rgba(0,0,0,.5));}
+.cover-main{font-family:'Cormorant Garamond',Georgia,serif;font-size:16px;line-height:1.25;color:#e6eef7;margin:8px 0 0;font-weight:400;max-width:300px;letter-spacing:.3px;}
+.cover-sub{font-size:8.5px;letter-spacing:3px;text-transform:uppercase;color:#8fa8c2;line-height:1.9;margin:0;font-weight:400;}
+
+.orn{width:64px;height:64px;color:#c9a227;margin:14px 0 12px;opacity:.9;animation:ornSpin 34s linear infinite;}
+@keyframes ornSpin{to{transform:rotate(360deg);}}
+
+.cover-author-block{margin-top:2px;}
+.cover-byline{font-size:7.5px;letter-spacing:3px;text-transform:uppercase;color:#7e96ae;margin:0 0 4px;font-weight:500;}
+.cover-author{font-family:'Cormorant Garamond',Georgia,serif;font-size:19px;font-weight:700;letter-spacing:.6px;color:#f3e2ab;margin:0;line-height:1.15;}
+.cover-role{font-size:8px;letter-spacing:2.4px;text-transform:uppercase;color:#9db2c8;margin:5px 0 0;font-weight:500;line-height:1.6;}
+.cover-foot{font-size:7.5px;letter-spacing:2.6px;text-transform:uppercase;color:#6e8399;margin:14px 0 0;font-weight:500;}
+
+/* ============ BACK COVER ============ */
 .backcover{background:radial-gradient(120% 90% at 50% 100%, #23456e 0%, #14293f 45%, #0a1727 100%);display:flex;align-items:center;justify-content:center;box-shadow:inset 0 0 0 1px rgba(201,162,39,.28), inset 0 0 90px rgba(0,0,0,.6);}
 .backcover::before{content:'';position:absolute;inset:22px;border:1px solid rgba(201,162,39,.32);}
 .backcover-inner{text-align:center;padding:0 46px;position:relative;z-index:2;}
-.backcover .fin{font-family:'Cormorant Garamond',Georgia,serif;font-size:46px;color:#e8cf7a;margin:0 0 6px;letter-spacing:6px;}
-.backcover .fin-sub{font-size:9px;letter-spacing:4px;text-transform:uppercase;color:#8fa8c2;margin:0 0 26px;}
-.backcover .fin-quote{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:16px;line-height:1.6;color:#b9cadd;margin:0;}
-.backcover .fin-rule{width:52px;height:1px;background:linear-gradient(90deg,transparent,#c9a227,transparent);margin:24px auto 0;}
+.backcover .fin{font-family:'Cormorant Garamond',Georgia,serif;font-size:42px;color:#e8cf7a;margin:0 0 4px;letter-spacing:6px;}
+.backcover .fin-sub{font-size:8.5px;letter-spacing:3.6px;text-transform:uppercase;color:#8fa8c2;margin:0 0 18px;}
+.backcover .fin-quote{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:14px;line-height:1.55;color:#b9cadd;margin:0 0 20px;}
+.backcover .fin-rule{width:52px;height:1px;background:linear-gradient(90deg,transparent,#c9a227,transparent);margin:0 auto 20px;}
+.backcover .fin-author{font-family:'Cormorant Garamond',Georgia,serif;font-size:15px;font-weight:700;color:#f3e2ab;margin:0 0 4px;letter-spacing:.5px;}
+.backcover .fin-inst{font-size:7.5px;letter-spacing:2.4px;text-transform:uppercase;color:#8fa8c2;line-height:1.7;margin:0;font-weight:500;}
 
 .rotate-hint{position:fixed;inset:0;z-index:200;display:none;place-items:center;background:rgba(5,8,13,.92);backdrop-filter:blur(6px);text-align:center;padding:30px;}
 .rotate-hint.show{display:grid;}
@@ -162,27 +201,6 @@ body{
 .rotate-hint p{font-size:12px;letter-spacing:2.6px;text-transform:uppercase;color:#8fa8c2;line-height:2;margin:0;}
 
 @media (max-width:760px){.hint{display:none;}.brand{font-size:9px;letter-spacing:2.4px;}}
-
-/* Moodle-safe responsive refinements */
-img,svg,canvas{max-width:100%;}
-.page, .cover, .backcover{min-width:0;min-height:0;}
-.page-body{min-height:0;overflow:hidden;}
-.cover-content{width:100%;max-width:100%;}
-.cover-title,.cover-main,.cover-sub,.p-title,.sec-title,.card h3,.card p,.abstract p,.pullquote p,.closing,.takeaways li{
-  overflow-wrap:anywhere;
-}
-@media (max-width:900px){
-  .topbar{padding:10px 12px;}
-  .brand{font-size:8px;letter-spacing:2.2px;}
-  .tools{display:none;}
-  .hud{padding:8px 12px 12px;gap:12px;}
-  .nav{width:36px;height:36px;}
-  .hint{display:none;}
-}
-@media (max-width:560px){
-  .scene{padding:46px 8px 66px;}
-}
-
 </style>
 </head>
 <body>
@@ -193,7 +211,7 @@ img,svg,canvas{max-width:100%;}
 <canvas id="dust"></canvas>
 
 <div class="topbar">
-  <div class="brand"><span class="dot"></span> Bovine Production · Vol. I</div>
+  <div class="brand"><span class="dot"></span> Dr. Fares Mohamed Amine · Bovine Production · Ch. I &amp; II</div>
   <div class="tools">
     <button class="tbtn" id="soundBtn" title="Toggle page sound">
       <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
@@ -209,16 +227,30 @@ img,svg,canvas{max-width:100%;}
     <div class="base left"></div>
     <div class="base right"></div>
 
+    <!-- ============ LEAF 0 : Cover | Ch.1 Intro ============ -->
     <div class="leaf" data-i="0">
       <div class="face front cover">
         <div class="cover-frame">
           <div class="cover-content">
-            <p class="cover-kicker">Bovine Production</p>
+
+            <p class="cover-ministry">
+              People&rsquo;s Democratic Republic of Algeria<br>
+              Ministry of Higher Education &amp; Scientific Research
+            </p>
+            <p class="cover-school">
+              Higher School of Saharan Agriculture<br>
+              El Oued &mdash; Algeria
+            </p>
+
             <div class="cover-line"></div>
-            <h1 class="cover-title">Chapter&nbsp;I</h1>
-            <p class="cover-main">Introduction to Bovine Production</p>
+
+            <p class="cover-course">Cattle Production &mdash; Lecture Notes</p>
+
+            <h1 class="cover-title">Bovine</h1>
+            <p class="cover-main">Production &amp; Conformation</p>
             <div class="cover-line short"></div>
-            <p class="cover-sub">Ethnology, Breeds &amp;<br>Biological Conversion</p>
+            <p class="cover-sub">Chapters I &amp; II<br>Ethnology &middot; Breeds &middot; Evaluation</p>
+
             <svg class="orn" viewBox="0 0 120 120" fill="none">
               <circle cx="60" cy="60" r="44" stroke="currentColor" stroke-width=".8" opacity=".55"/>
               <circle cx="60" cy="60" r="35" stroke="currentColor" stroke-width=".5" opacity=".35"/>
@@ -226,7 +258,15 @@ img,svg,canvas{max-width:100%;}
               <circle cx="60" cy="60" r="4.2" fill="currentColor" opacity=".85"/>
               <circle cx="60" cy="60" r="1.6" fill="#0b1a2c"/>
             </svg>
-            <p class="cover-foot">Volume I &middot; An Illustrated Study</p>
+
+            <div class="cover-author-block">
+              <p class="cover-byline">Prepared &amp; Presented by</p>
+              <p class="cover-author">Dr. Fares Mohamed Amine</p>
+              <p class="cover-role">Teacher&ndash;Researcher &middot; Department of Animal Production</p>
+            </div>
+
+            <p class="cover-foot">Academic Year &middot; Volume I</p>
+
           </div>
         </div>
       </div>
@@ -246,7 +286,7 @@ img,svg,canvas{max-width:100%;}
               systems, recognizing the cow as an exceptional biological converter of
               cellulose.</p>
           </div>
-          <div class="pullquote" style="margin-top:34px;">
+          <div class="pullquote">
             <p>&ldquo;The cow is not merely a livestock animal &mdash; she is a living
               fermentation vat, a walking bridge between sun, soil and sustenance.&rdquo;</p>
             <span>Prologue</span>
@@ -256,6 +296,7 @@ img,svg,canvas{max-width:100%;}
       </div>
     </div>
 
+    <!-- ============ LEAF 1 : Ch.1 Foundations | Ch.1 Breed ============ -->
     <div class="leaf" data-i="1">
       <div class="face front page">
         <div class="run-head"><span>Foundations</span><span>Bovine Sector</span></div>
@@ -286,7 +327,7 @@ img,svg,canvas{max-width:100%;}
       <div class="face back page">
         <div class="run-head"><span>Foundations</span><span>Breed Typology</span></div>
         <div class="page-body">
-          <div class="card" style="margin-top:6px;">
+          <div class="card" style="margin-top:4px;">
             <div class="card-num">3</div>
             <h3>Breed Classification</h3>
             <p><strong>Production Orientation:</strong> Breeds are categorized by
@@ -311,6 +352,7 @@ img,svg,canvas{max-width:100%;}
       </div>
     </div>
 
+    <!-- ============ LEAF 2 : Ch.1 Takeaways | Ch.2 Opener ============ -->
     <div class="leaf" data-i="2">
       <div class="face front page">
         <div class="run-head"><span>Summary</span><span>Key Takeaways</span></div>
@@ -331,18 +373,259 @@ img,svg,canvas{max-width:100%;}
             <li><strong>The Algerian bridge.</strong> Saharan and steppe extensive systems
               meet modern peri-urban farming &mdash; a single, evolving sector.</li>
           </ul>
-          <div class="p-rule" style="margin-top:30px;"><span>&#10022;</span></div>
+          <div class="p-rule" style="margin-top:22px;"><span>&#10022;</span></div>
         </div>
         <div class="page-foot"><span class="pnum">5</span></div>
+      </div>
+
+      <div class="face back page">
+        <div class="run-head"><span>Chapter II</span><span>Conformation</span></div>
+        <div class="page-body">
+          <div class="chapter-num">II</div>
+          <h1 class="p-title">Bovine Conformation &amp; Evaluation</h1>
+          <p class="p-sub">Methodical Anatomical Division</p>
+          <div class="p-rule"><span>&#10022;</span></div>
+          <div class="abstract">
+            <p><strong>Conformation Evaluation:</strong> The systematic observation and
+              interpretation of the animal&rsquo;s external appearance &mdash; its
+              morphology, proportions, muscularity, and posture &mdash; to deduce
+              information about productivity, health, and adaptation. The external
+              structure reflects the animal&rsquo;s physiological systems; it is the
+              visible expression of genetic potential and the result of both natural and
+              artificial selection.</p>
+          </div>
+          <div class="pullquote">
+            <p>&ldquo;The exterior is a window onto the interior &mdash; form betrays
+              function, and structure foretells yield.&rdquo;</p>
+            <span>Principle</span>
+          </div>
+        </div>
+        <div class="page-foot"><span class="pnum">6</span></div>
+      </div>
+    </div>
+
+    <!-- ============ LEAF 3 : Ch.2 Three Regions | Ch.2 Comparison ============ -->
+    <div class="leaf" data-i="3">
+      <div class="face front page">
+        <div class="run-head"><span>Chapter II</span><span>Anatomical Regions</span></div>
+        <div class="page-body">
+          <h2 class="sec-title">The Three Principal Regions</h2>
+          <div class="sec-rule"></div>
+
+          <div class="card compact">
+            <div class="card-num">1</div>
+            <h3>The Anterior Region</h3>
+            <p><strong>Head, Neck &amp; Shoulders</strong> &mdash; indicators of health, breed type, and sexual dimorphism.</p>
+            <ul class="mini-list">
+              <li><b>Muzzle:</b> moist, cool, free of crusts.</li>
+              <li><b>Eyes:</b> clear, bright, alert.</li>
+              <li><b>Jaw:</b> aligned for grazing &amp; rumination.</li>
+              <li><b>Neck:</b> long/thin (dairy); thick (beef bulls).</li>
+            </ul>
+          </div>
+
+          <div class="card compact">
+            <div class="card-num">2</div>
+            <h3>The Middle Region</h3>
+            <p><strong>The Core of Production</strong> &mdash; houses the ruminant stomach, heart, and lungs.</p>
+            <ul class="mini-list">
+              <li><b>Thorax:</b> deep, broad &mdash; cardiopulmonary capacity.</li>
+              <li><b>Back &amp; Loin:</b> straight, level; short, wide.</li>
+              <li><b>Ribs:</b> long, flat (dairy); curved (beef).</li>
+              <li><b>Abdomen:</b> deep, voluminous &mdash; large rumen.</li>
+            </ul>
+          </div>
+
+          <div class="card compact">
+            <div class="card-num">3</div>
+            <h3>The Posterior Region</h3>
+            <p><strong>Power &amp; Production</strong> &mdash; powerhouse of locomotion and valuable muscle mass.</p>
+            <ul class="mini-list">
+              <li><b>Rump:</b> long, wide, slightly sloped.</li>
+              <li><b>Thighs:</b> thick, convex (beef); thin (dairy).</li>
+              <li><b>Limbs:</b> correct aplombs for longevity.</li>
+              <li><b>Feet:</b> strong, well-angled hooves.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="page-foot"><span class="pnum">7</span></div>
+      </div>
+
+      <div class="face back page">
+        <div class="run-head"><span>Chapter II</span><span>Comparative Form</span></div>
+        <div class="page-body">
+          <h2 class="sec-title">Comparative Conformation</h2>
+          <p class="small-sub">Dairy vs. Beef &mdash; Functional Adaptation</p>
+
+          <div class="dual-grid">
+            <div class="dual-col dairy">
+              <h4>Dairy Cow</h4>
+              <span class="ex">e.g., Holstein</span>
+              <ul>
+                <li><span>Form:</span> Angular, triangular</li>
+                <li><span>Loin:</span> Narrow, flat</li>
+                <li><span>Thighs:</span> Thin, open</li>
+                <li><span>Abdomen:</span> Deep, voluminous</li>
+                <li><span>Skin:</span> Thin, flexible</li>
+                <li><span>Muscle:</span> Lean, low-fat</li>
+              </ul>
+            </div>
+            <div class="dual-col beef">
+              <h4>Beef Cow</h4>
+              <span class="ex">e.g., Charolais</span>
+              <ul>
+                <li><span>Form:</span> Rectangular, blocky</li>
+                <li><span>Loin:</span> Wide, thick, muscular</li>
+                <li><span>Thighs:</span> Full, convex</li>
+                <li><span>Abdomen:</span> Compact, firm</li>
+                <li><span>Skin:</span> Thick, firm</li>
+                <li><span>Muscle:</span> Dense, hypertrophied</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="note">
+            Every morphological contrast illustrates the principle of functional
+            adaptation &mdash; a breed&rsquo;s structure reflects its production purpose.
+          </div>
+        </div>
+        <div class="page-foot"><span class="pnum">8</span></div>
+      </div>
+    </div>
+
+    <!-- ============ LEAF 4 : Ch.2 Anamorphosis/Alloidism | Ch.2 Udder/Locomotion ============ -->
+    <div class="leaf" data-i="4">
+      <div class="face front page">
+        <div class="run-head"><span>Chapter II</span><span>Proportions &amp; Profile</span></div>
+        <div class="page-body">
+          <h2 class="sec-title">Anamorphosis</h2>
+          <p class="small-sub">Proportional variation &mdash; height, length, width</p>
+          <div class="three-col">
+            <div class="mini-card">
+              <h4>Longiline</h4>
+              <p>Elongated, fine, narrow body; long neck &amp; limbs.</p>
+              <span>Milk &middot; Holstein</span>
+            </div>
+            <div class="mini-card">
+              <h4>Brevline</h4>
+              <p>Short, wide, compact frame; thick neck &amp; limbs.</p>
+              <span>Meat &middot; Charolais</span>
+            </div>
+            <div class="mini-card">
+              <h4>Medioline</h4>
+              <p>Intermediate, balanced conformation.</p>
+              <span>Dual &middot; Montb&eacute;liarde</span>
+            </div>
+          </div>
+
+          <h2 class="sec-title" style="margin-top:22px;">Alloidism</h2>
+          <p class="small-sub">Silhouette &mdash; spine, head, pelvis</p>
+          <div class="three-col">
+            <div class="mini-card">
+              <h4>Concaviline</h4>
+              <p>Dished head; swayback topline.</p>
+              <span>Feminine &middot; Dairy</span>
+            </div>
+            <div class="mini-card">
+              <h4>Convexiline</h4>
+              <p>Roman nose; arched back.</p>
+              <span>Masculine &middot; Meat</span>
+            </div>
+            <div class="mini-card">
+              <h4>Rectiline</h4>
+              <p>Straight profile; level back.</p>
+              <span>Balanced &middot; Dual</span>
+            </div>
+          </div>
+        </div>
+        <div class="page-foot"><span class="pnum">9</span></div>
+      </div>
+
+      <div class="face back page">
+        <div class="run-head"><span>Chapter II</span><span>Udder &amp; Movement</span></div>
+        <div class="page-body">
+          <h2 class="sec-title">The Mammary Gland</h2>
+          <p class="small-sub">The functional organ of dairy production</p>
+          <div class="dual-grid">
+            <div class="dual-col">
+              <h4 style="color:#2d4a26;">Desirable</h4>
+              <span class="ex">High &amp; productive</span>
+              <ul>
+                <li><span>Attach:</span> High, firm</li>
+                <li><span>Texture:</span> Soft, pliable</li>
+                <li><span>Teats:</span> Uniform, vertical</li>
+                <li><span>Veins:</span> Prominent, sinuous</li>
+              </ul>
+            </div>
+            <div class="dual-col">
+              <h4 style="color:#8b3a2a;">Undesirable</h4>
+              <span class="ex">Faulty &amp; risky</span>
+              <ul>
+                <li><span>Attach:</span> Pendulous, weak</li>
+                <li><span>Texture:</span> Hard, fibrous</li>
+                <li><span>Teats:</span> Asymmetric, bulbous</li>
+                <li><span>Veins:</span> Invisible</li>
+              </ul>
+            </div>
+          </div>
+          <div class="note">
+            Udder faults predispose cows to mastitis &mdash; a major economic disease.
+            Volume &amp; vascularity are reliable visual indicators of milk yield.
+          </div>
+
+          <h2 class="sec-title" style="margin-top:16px;">Locomotion &amp; Aplombs</h2>
+          <div class="correct-list">
+            <b>Correct:</b> Legs straight when viewed front &amp; side; hooves evenly planted.
+          </div>
+          <div class="fault-list">
+            <b>Faults:</b> Knock-kneed, toe-out, cow-hocked, sickle-hocked &mdash; cause lameness,
+            joint wear, reproductive issues, and early culling.
+          </div>
+        </div>
+        <div class="page-foot"><span class="pnum">10</span></div>
+      </div>
+    </div>
+
+    <!-- ============ LEAF 5 : Ch.2 Closing | Back cover ============ -->
+    <div class="leaf" data-i="5">
+      <div class="face front page">
+        <div class="run-head"><span>Synthesis</span><span>Closing Thought</span></div>
+        <div class="page-body">
+          <h2 class="sec-title">Form Follows Function</h2>
+          <div class="sec-rule"></div>
+
+          <div class="abstract" style="margin-top:2px;">
+            <p>Whether navigating the temperate climates of Europe with high-yielding
+              Holsteins, or managing resilient breeds in arid steppes, the modern producer
+              must master the relationship between <strong>genetics, environment, and
+              physical form</strong> to guarantee a profitable enterprise.</p>
+          </div>
+
+          <div class="pullquote" style="margin-top:26px;">
+            <p>&ldquo;Correct conformation &mdash; from the muzzle to the hooves &mdash;
+              remains the foundation of functional efficiency, reproductive success, and
+              long-term herd sustainability.&rdquo;</p>
+            <span>Chapter II &middot; Final Word</span>
+          </div>
+
+          <div class="closing" style="margin-top:26px;">
+            <strong>Mastery of conformation</strong> is mastery of the animal&rsquo;s
+            silent language. Every angle, every curve, every proportion tells a story of
+            genetic potential &mdash; a story the trained eye alone can read.
+          </div>
+        </div>
+        <div class="page-foot"><span class="pnum">11</span></div>
       </div>
 
       <div class="face back backcover">
         <div class="backcover-inner">
           <p class="fin">FIN</p>
-          <p class="fin-sub">Chapter One &middot; Complete</p>
+          <p class="fin-sub">Volume I &middot; Chapters I &amp; II</p>
           <p class="fin-quote">&ldquo;To understand the cow is to understand how the sun
-            becomes supper.&rdquo;</p>
+            becomes supper &mdash; and how form becomes function.&rdquo;</p>
           <div class="fin-rule"></div>
+          <p class="fin-author">Dr. Fares Mohamed Amine</p>
+          <p class="fin-inst">Higher School of Saharan Agriculture<br>El Oued &middot; Algeria</p>
         </div>
       </div>
     </div>
@@ -437,6 +720,22 @@ function goto(target){
 prevBtn.addEventListener('click', prev);
 nextBtn.addEventListener('click', next);
 
+let downX = null, downY = null, wasDrag = false;
+scene.addEventListener('pointerdown', e => { downX = e.clientX; downY = e.clientY; wasDrag = false; });
+scene.addEventListener('pointerup', e => {
+  if (downX === null) return;
+  const dx = e.clientX - downX, dy = e.clientY - downY;
+  downX = null;
+  if (Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy)){ wasDrag = true; dx < 0 ? next() : prev(); }
+  else if (Math.abs(dx) < 12 && Math.abs(dy) < 12){ wasDrag = false; }
+  else { wasDrag = true; }
+});
+scene.addEventListener('click', e => {
+  if (wasDrag){ wasDrag = false; return; }
+  const r = book.getBoundingClientRect();
+  const mid = r.left + r.width / 2;
+  e.clientX > mid ? next() : prev();
+});
 
 window.addEventListener('keydown', e => {
   if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown'){ e.preventDefault(); next(); }
@@ -492,75 +791,39 @@ function playFlipSound(forward){
   osc.start(now + dur * 0.70); osc.stop(now + dur * 1.1);
 }
 
-/* ============================================================
-   MOODLE-SAFE FIT
-   Scale the complete 960×680 spread into the usable iframe area.
-   The small 2D tilt is disabled because tight iframe widths can crop
-   the outer edges of the spread.
-   ============================================================ */
 const BW = 960, BH = 680;
+const LEFT_PAD = 20;
+const RIGHT_PAD = 110;
+const PAD_V = 8;
 
 function fit(){
-  const vw = Math.max(320, window.innerWidth);
-  const vh = Math.max(240, window.innerHeight);
-
-  /* Reserve space for the fixed top bar + navigation controls. */
-  const usableW = Math.max(280, vw - 28);
-  const usableH = Math.max(220, vh - 118);
-
-  const s = Math.min(usableW / BW, usableH / BH);
-
+  const vw = window.innerWidth;
+  const vh = window.innerHeight;
+  const availW = vw - LEFT_PAD - RIGHT_PAD;
+  const availH = vh - PAD_V * 2;
+  const s = Math.min(availW / BW, availH / BH);
   document.documentElement.style.setProperty('--s', s.toFixed(4));
-  document.documentElement.style.setProperty('--rx', '0deg');
-  document.documentElement.style.setProperty('--ry', '0deg');
 
   const hint = document.getElementById('rotateHint');
   const portraitPhone = vw < 720 && vh > vw;
   hint.classList.toggle('show', portraitPhone);
 }
-
-window.addEventListener('resize', fit, {passive:true});
+window.addEventListener('resize', fit);
 fit();
 window.addEventListener('orientationchange', () => setTimeout(fit, 200));
 
-/* Keep the spread optically centered in the iframe. */
-let downX = null, downY = null, wasDrag = false;
-scene.addEventListener('pointerdown', e => {
-  downX = e.clientX;
-  downY = e.clientY;
-  wasDrag = false;
-}, {passive:true});
-
-scene.addEventListener('pointerup', e => {
-  if (downX === null) return;
-
-  const dx = e.clientX - downX;
-  const dy = e.clientY - downY;
-  downX = null;
-
-  if (Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy)){
-    wasDrag = true;
-    dx < 0 ? next() : prev();
-  } else if (Math.abs(dx) < 12 && Math.abs(dy) < 12){
-    wasDrag = false;
-  } else {
-    wasDrag = true;
-  }
+let tx = 0, ty = 0, cx = 0, cy = 0;
+window.addEventListener('pointermove', e => {
+  const nx = (e.clientX / window.innerWidth  - 0.5) * 2;
+  const ny = (e.clientY / window.innerHeight - 0.5) * 2;
+  tx =  nx * 3.0; ty = -ny * 2.2;
 });
-
-scene.addEventListener('click', e => {
-  if (wasDrag){
-    wasDrag = false;
-    return;
-  }
-
-  const r = book.getBoundingClientRect();
-  if (e.clientX < r.left || e.clientX > r.right ||
-      e.clientY < r.top  || e.clientY > r.bottom) return;
-
-  const mid = r.left + r.width / 2;
-  e.clientX > mid ? next() : prev();
-});
+(function loop(){
+  cx += (tx - cx) * 0.07; cy += (ty - cy) * 0.07;
+  book.style.setProperty('--ry', cx.toFixed(2) + 'deg');
+  book.style.setProperty('--rx', cy.toFixed(2) + 'deg');
+  requestAnimationFrame(loop);
+})();
 
 (function dust(){
   const cvs = document.getElementById('dust');
