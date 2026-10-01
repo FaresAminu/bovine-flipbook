@@ -773,19 +773,9 @@ const BW = 960, BH = 680;
 function fit(){
   const vw = window.innerWidth;
   const vh = window.innerHeight;
-
-  /* reserve space for the top bar and bottom HUD */
-  const TOP_RESERVE    = 56;
-  const BOTTOM_RESERVE = 76;
-  const SIDE_RESERVE   = 24;
-
-  const availW = vw - SIDE_RESERVE * 2;
-  const availH = vh - TOP_RESERVE - BOTTOM_RESERVE;
-
-  /* contain: fit entire book inside available area */
-  const s = Math.min(availW / BW, availH / BH);
-
-  document.documentElement.style.setProperty('--s', s.toFixed(3));
+  const PAD = 8;                                   /* tiny edge padding only */
+  const s = Math.min((vw - PAD*2) / BW, (vh - PAD*2) / BH);
+  document.documentElement.style.setProperty('--s', s.toFixed(4));
 
   const hint = document.getElementById('rotateHint');
   const portraitPhone = vw < 720 && vh > vw;
