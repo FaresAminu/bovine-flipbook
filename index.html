@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chapter I — Introduction to Bovine Production</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   RESET & ATMOSPHERE
+   ============================================================ */
+*{box-sizing:border-box;}
+html,body{height:100%;margin:0;}
+body{
+  overflow:hidden;
+  font-family:'Inter','Helvetica Neue',Helvetica,Arial,sans-serif;
+  color:#dfe7f0;
+  background:
+    radial-gradient(1200px 820px at 12% -5%, #17304d 0%, transparent 62%),
+    radial-gradient(1000px 760px at 92% 105%, #1a2c46 0%, transparent 58%),
+    radial-gradient(circle at 50% 48%, #0d1826 0%, #05080d 100%);
+  -webkit-font-smoothing:antialiased;
+}
+
+/* drifting light orbs */
+.orb{
+  position:fixed;border-radius:50%;filter:blur(110px);opacity:.30;
+  pointer-events:none;z-index:0;
+}
+.orb.a{width:540px;height:540px;background:#2f7bbd;top:-180px;left:-140px;animation:drift1 19s ease-in-out infinite;}
+.orb.b{width:480px;height:480px;background:#b58f22;bottom:-200px;right:-140px;animation:drift2 24s ease-in-out infinite;}
+.orb.c{width:380px;height:380px;background:#3f5f9a;top:45%;left:52%;opacity:.16;animation:drift1 28s ease-in-out infinite reverse;}
+@keyframes drift1{50%{transform:translate3d(90px,70px,0) scale(1.16);}}
+@keyframes drift2{50%{transform:translate3d(-80px,-60px,0) scale(1.12);}}
+
+#dust{position:fixed;inset:0;z-index:1;pointer-events:none;}
+
+/* ============================================================
+   CHROME (top bar / hud)
+   ============================================================ */
+.topbar{
+  position:fixed;top:0;left:0;right:0;z-index:60;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px 26px;pointer-events:none;
+}
+.brand{
+  display:flex;align-items:center;gap:11px;
+  font-size:11px;letter-spacing:3.4px;text-transform:uppercase;
+  color:#8fa5bf;font-weight:500;
+}
+.brand .dot{
+  width:8px;height:8px;border-radius:50%;
+  background:linear-gradient(140deg,#f0dc9a,#c9a227);
+  box-shadow:0 0 14px rgba(201,162,39,.85);
+}
+.tools{display:flex;gap:10px;pointer-events:auto;}
+.tbtn{
+  width:40px;height:40px;border-radius:50%;
+  display:grid;place-items:center;cursor:pointer;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.12);
+  color:#c8d6e6;backdrop-filter:blur(8px);
+  transition:.25s;
+}
+.tbtn:hover{background:rgba(201,162,39,.16);border-color:rgba(201,162,39,.5);color:#f0dc9a;transform:translateY(-2px);}
+.tbtn.off{opacity:.42;}
+
+.hud{
+  position:fixed;bottom:0;left:0;right:0;z-index:60;
+  display:flex;align-items:center;justify-content:center;gap:22px;
+  padding:16px 20px 22px;pointer-events:none;
+}
+.hud > *{pointer-events:auto;}
+
+.nav{
+  width:46px;height:46px;border-radius:50%;
+  display:grid;place-items:center;cursor:pointer;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.13);
+  color:#d5e2f0;font-size:20px;line-height:1;
+  backdrop-filter:blur(8px);
+  transition:.25s;
+}
+.nav:hover:not(:disabled){background:rgba(201,162,39,.18);border-color:rgba(201,162,39,.55);color:#f3e2ab;transform:translateY(-2px);}
+.nav:disabled{opacity:.22;cursor:default;}
+
+.dots{display:flex;gap:10px;align-items:center;}
+.dot-btn{
+  width:9px;height:9px;border-radius:50%;cursor:pointer;
+  background:rgba(255,255,255,.2);border:none;padding:0;
+  transition:.3s;
+}
+.dot-btn:hover{background:rgba(255,255,255,.45);}
+.dot-btn.on{
+  width:26px;border-radius:5px;
+  background:linear-gradient(90deg,#e8cf7a,#c9a227);
+  box-shadow:0 0 14px rgba(201,162,39,.6);
+}
+
+.hint{
+  position:fixed;bottom:78px;left:0;right:0;text-align:center;z-index:55;
+  font-size:11px;letter-spacing:2.2px;text-transform:uppercase;
+  color:#5f7590;pointer-events:none;
+  animation:hintPulse 3.6s ease-in-out infinite;
+}
+@keyframes hintPulse{0%,100%{opacity:.45;}50%{opacity:.95;}}
+
+/* ============================================================
+   STAGE & BOOK
+   ============================================================ */
+.scene{
+  position:fixed;inset:0;z-index:10;
+  display:grid;place-items:center;
+  perspective:3000px;
+  perspective-origin:50% 48%;
+}
+.book{
+  position:relative;
+  width:960px;height:680px;
+  transform-style:preserve-3d;
+  transform:scale(var(--s,1)) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));
+  transition:transform .12s linear;
+  animation:bookIn 1.4s cubic-bezier(.19,1,.22,1) both;
+}
+@keyframes bookIn{
+  0%{opacity:0;transform:scale(calc(var(--s,1)*.82)) rotateX(18deg) rotateY(-24deg) translateY(60px);}
+  100%{opacity:1;}
+}
+
+/* soft ground shadow */
+.book::after{
+  content:'';position:absolute;left:3%;right:3%;bottom:-46px;height:60px;
+  background:radial-gradient(ellipse at 50% 50%, rgba(0,0,0,.72), transparent 72%);
+  filter:blur(14px);z-index:-1;
+}
+
+/* base covers (visible when closed / fully flipped) */
+.base{
+  position:absolute;top:0;width:480px;height:100%;z-index:0;
+  background:
+    linear-gradient(135deg,#16304e 0%,#0d1d31 55%,#091522 100%);
+  border:1px solid rgba(201,162,39,.20);
+}
+.base.left{
+  left:0;border-radius:6px 0 0 6px;
+  box-shadow:inset -26px 0 48px -20px rgba(0,0,0,.85), 0 30px 70px -22px rgba(0,0,0,.85);
+}
+.base.right{
+  left:480px;border-radius:0 6px 6px 0;
+  box-shadow:inset 26px 0 48px -20px rgba(0,0,0,.85), 0 30px 70px -22px rgba(0,0,0,.85);
+}
+
+/* ============================================================
+   LEAVES
+   ============================================================ */
+.leaf{
+  position:absolute;top:0;left:480px;
+  width:480px;height:100%;
+  transform-origin:left center;
+  transform-style:preserve-3d;
+  transition:transform .92s cubic-bezier(.645,.045,.355,1);
+  will-change:transform;
+}
+.leaf.flipped{transform:rotateY(-180deg);}
+
+.face{
+  position:absolute;inset:0;
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+  overflow:hidden;
+  border-radius:2px;
+}
+.face.back{transform:rotateY(180deg);}
+
+/* ---- paper pages ---- */
+.page{
+  background:
+    linear-gradient(180deg,#fffdf9 0%,#fbf6ec 55%,#f4ecdd 100%);
+  display:flex;flex-direction:column;
+  padding:40px 44px 46px;
+}
+.page::after{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.42'/%3E%3C/svg%3E");
+  opacity:.30;mix-blend-mode:multiply;
+}
+/* spine shading */
+.face.front.page{box-shadow:inset 30px 0 44px -26px rgba(30,58,95,.34), inset 0 0 0 1px rgba(0,0,0,.05);}
+.face.back.page{box-shadow:inset -30px 0 44px -26px rgba(30,58,95,.34), inset 0 0 0 1px rgba(0,0,0,.05);}
+
+/* running head */
+.run-head{
+  display:flex;justify-content:space-between;align-items:center;
+  font-size:9.5px;letter-spacing:2.6px;text-transform:uppercase;
+  color:#93a3b4;padding-bottom:9px;margin-bottom:22px;
+  border-bottom:1px solid #e3dccd;position:relative;z-index:2;
+}
+.run-head::after{
+  content:'';position:absolute;bottom:-1px;left:0;width:56px;height:1px;background:#c9a227;
+}
+
+/* page number */
+.page-foot{
+  position:absolute;bottom:16px;left:0;right:0;text-align:center;z-index:2;
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:13px;letter-spacing:2px;color:#9aa8b6;
+}
+.page-foot .pnum{
+  display:inline-flex;align-items:center;gap:12px;
+}
+.page-foot .pnum::before,
+.page-foot .pnum::after{
+  content:'';width:26px;height:1px;background:#ddd5c5;
+}
+
+.page-body{flex:1;position:relative;z-index:2;}
+
+/* ---- chapter opener (page 2) ---- */
+.chapter-num{
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:78px;line-height:.85;color:#e6dcc6;
+  margin:2px 0 -12px;font-weight:600;
+}
+.p-title{
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:33px;line-height:1.14;color:#16304e;
+  margin:0 0 10px;font-weight:700;letter-spacing:-.4px;
+}
+.p-sub{
+  font-size:10.5px;letter-spacing:3.4px;text-transform:uppercase;
+  color:#8b9bab;margin:0 0 20px;font-weight:500;
+}
+.p-rule{display:flex;align-items:center;gap:12px;margin:0 0 24px;color:#c9a227;}
+.p-rule::before,.p-rule::after{content:'';height:1px;background:linear-gradient(90deg,transparent,#d8ceb6,transparent);flex:1;}
+.p-rule span{font-size:11px;}
+
+.abstract{
+  background:linear-gradient(180deg,#f7f3ea,#f1ebdd);
+  border-left:4px solid #1e3a5f;
+  padding:20px 22px;position:relative;
+  box-shadow:0 1px 3px rgba(0,0,0,.05);
+}
+.abstract::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,#1e3a5f,transparent);
+}
+.abstract p{
+  margin:0;font-size:13.2px;line-height:1.78;color:#33404e;
+}
+.abstract strong{
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:16px;color:#16304e;font-weight:700;
+}
+
+/* ---- section heading ---- */
+.sec-title{
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:25px;color:#16304e;margin:0 0 8px;font-weight:700;letter-spacing:-.2px;
+  line-height:1.2;
+}
+.sec-rule{
+  width:64px;height:2px;
+  background:linear-gradient(90deg,#c9a227,#e8cf7a);
+  margin:0 0 26px;
+}
+
+/* ---- cards ---- */
+.card{
+  position:relative;background:#fff;
+  border:1px solid #e5ded0;
+  border-left:3px solid #1e3a5f;
+  padding:16px 18px 16px 20px;
+  margin-top:24px;
+  box-shadow:0 2px 6px rgba(30,58,95,.06);
+  transition:transform .3s, box-shadow .3s;
+}
+.card:hover{transform:translateX(4px);box-shadow:0 6px 18px rgba(30,58,95,.13);}
+.card-num{
+  position:absolute;top:-14px;left:14px;
+  width:28px;height:28px;border-radius:50%;
+  background:linear-gradient(140deg,#2a4d78,#16304e);
+  color:#f3e6bd;
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:15px;font-weight:700;
+  display:grid;place-items:center;
+  box-shadow:0 3px 8px rgba(30,58,95,.4);
+  border:1px solid rgba(201,162,39,.45);
+}
+.card h3{
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:18px;color:#16304e;margin:6px 0 8px;font-weight:700;letter-spacing:.1px;
+}
+.card p{font-size:12.4px;line-height:1.66;color:#41505f;margin:0;}
+.card p strong{color:#0d2136;font-weight:600;}
+
+/* ---- pull quote ---- */
+.pullquote{
+  margin-top:26px;padding:18px 20px;
+  border-top:1px solid #e3dccd;border-bottom:1px solid #e3dccd;
+  text-align:center;
+}
+.pullquote p{
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-style:italic;font-size:17px;line-height:1.5;color:#5a6b7c;margin:0;
+}
+.pullquote span{display:block;margin-top:8px;font-size:9px;letter-spacing:2.6px;text-transform:uppercase;color:#b0a78f;font-style:normal;font-family:'Inter',sans-serif;}
+
+/* ---- closing note ---- */
+.closing{
+  margin-top:26px;background:#16304e;color:#cddbe8;
+  padding:20px 22px;font-size:12.4px;line-height:1.72;
+  border-top:3px solid #c9a227;
+}
+.closing strong{color:#f0dc9a;font-weight:600;}
+
+/* ---- takeaways ---- */
+.takeaways{list-style:none;margin:0;padding:0;}
+.takeaways li{
+  position:relative;padding-left:30px;margin-bottom:18px;
+  font-size:12.8px;line-height:1.68;color:#3a4756;
+}
+.takeaways li::before{
+  content:'';position:absolute;left:6px;top:7px;
+  width:9px;height:9px;transform:rotate(45deg);
+  background:linear-gradient(140deg,#e8cf7a,#c9a227);
+  box-shadow:0 0 0 3px rgba(201,162,39,.14);
+}
+.takeaways li strong{color:#16304e;font-weight:600;}
+
+/* ============================================================
+   COVER
+   ============================================================ */
+.cover{
+  background:
+    radial-gradient(120% 90% at 50% 0%, #23456e 0%, #14293f 45%, #0a1727 100%);
+  padding:0;
+  box-shadow:inset 0 0 0 1px rgba(201,162,39,.28), inset 0 0 90px rgba(0,0,0,.6);
+}
+.cover::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:
+    repeating-linear-gradient(115deg, rgba(255,255,255,.022) 0 2px, transparent 2px 5px),
+    radial-gradient(60% 40% at 30% 15%, rgba(255,255,255,.10), transparent 60%);
+}
+.cover-frame{
+  position:absolute;inset:22px;
+  border:1px solid rgba(201,162,39,.42);
+  display:flex;align-items:center;justify-content:center;
+  padding:26px 22px;
+}
+.cover-frame::before{
+  content:'';position:absolute;inset:6px;
+  border:1px solid rgba(201,162,39,.16);
+}
+.cover-content{
+  text-align:center;position:relative;z-index:2;
+  display:flex;flex-direction:column;align-items:center;
+}
+.cover-kicker{
+  font-size:10px;letter-spacing:5.5px;text-transform:uppercase;
+  color:#9db2c8;margin:0 0 20px;font-weight:500;
+}
+.cover-line{
+  width:80px;height:1px;
+  background:linear-gradient(90deg,transparent,#c9a227,transparent);
+  margin:0 auto 20px;
+}
+.cover-line.short{width:44px;margin:16px auto 20px;}
+.cover-title{
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:62px;line-height:1;margin:0;font-weight:700;letter-spacing:1px;
+  background:linear-gradient(175deg,#fbf1c4 0%,#e8cf7a 32%,#b8901c 52%,#e8cf7a 72%,#fbf1c4 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 2px 3px rgba(0,0,0,.5));
+}
+.cover-main{
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:19px;line-height:1.35;color:#e6eef7;margin:14px 0 0;
+  font-weight:400;max-width:300px;letter-spacing:.3px;
+}
+.cover-sub{
+  font-size:9.5px;letter-spacing:3.6px;text-transform:uppercase;
+  color:#8fa8c2;line-height:2;margin:0;font-weight:400;
+}
+.orn{
+  width:104px;height:104px;color:#c9a227;margin:26px 0 22px;
+  opacity:.9;
+  animation:ornSpin 34s linear infinite;
+}
+@keyframes ornSpin{to{transform:rotate(360deg);}}
+.cover-foot{
+  font-size:9px;letter-spacing:3.2px;text-transform:uppercase;
+  color:#7c93ab;margin:0;
+}
+
+/* ---- back cover ---- */
+.backcover{
+  background:
+    radial-gradient(120% 90% at 50% 100%, #23456e 0%, #14293f 45%, #0a1727 100%);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:inset 0 0 0 1px rgba(201,162,39,.28), inset 0 0 90px rgba(0,0,0,.6);
+}
+.backcover::before{
+  content:'';position:absolute;inset:22px;
+  border:1px solid rgba(201,162,39,.32);
+}
+.backcover-inner{text-align:center;padding:0 46px;position:relative;z-index:2;}
+.backcover .fin{
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:46px;color:#e8cf7a;margin:0 0 6px;letter-spacing:6px;
+}
+.backcover .fin-sub{
+  font-size:9px;letter-spacing:4px;text-transform:uppercase;color:#8fa8c2;margin:0 0 26px;
+}
+.backcover .fin-quote{
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-style:italic;font-size:16px;line-height:1.6;color:#b9cadd;margin:0;
+}
+.backcover .fin-rule{
+  width:52px;height:1px;background:linear-gradient(90deg,transparent,#c9a227,transparent);
+  margin:24px auto 0;
+}
+
+/* ============================================================
+   RESPONSIVE HINT
+   ============================================================ */
+.rotate-hint{
+  position:fixed;inset:0;z-index:200;display:none;
+  place-items:center;background:rgba(5,8,13,.92);backdrop-filter:blur(6px);
+  text-align:center;padding:30px;
+}
+.rotate-hint.show{display:grid;}
+.rotate-hint .rh-icon{
+  font-size:44px;margin-bottom:16px;display:block;
+  animation:rot 2.6s ease-in-out infinite;
+}
+@keyframes rot{0%,40%{transform:rotate(0);}60%,100%{transform:rotate(90deg);}}
+.rotate-hint p{font-size:12px;letter-spacing:2.6px;text-transform:uppercase;color:#8fa8c2;line-height:2;margin:0;}
+
+@media (max-width:760px){
+  .hint{display:none;}
+  .brand{font-size:9px;letter-spacing:2.4px;}
+}
+</style>
+</head>
+<body>
+
+<div class="orb a"></div>
+<div class="orb b"></div>
+<div class="orb c"></div>
+<canvas id="dust"></canvas>
+
+<!-- ===================== TOP BAR ===================== -->
+<div class="topbar">
+  <div class="brand"><span class="dot"></span> Bovine Production · Vol. I</div>
+  <div class="tools">
+    <button class="tbtn" id="soundBtn" title="Toggle page sound">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<!-- ===================== BOOK ===================== -->
+<div class="scene" id="scene">
+  <div class="book" id="book">
+
+    <!-- base covers -->
+    <div class="base left"></div>
+    <div class="base right"></div>
+
+    <!-- ============ LEAF 0 : Front cover  |  Page 2 ============ -->
+    <div class="leaf" data-i="0">
+
+      <!-- FRONT — COVER -->
+      <div class="face front cover">
+        <div class="cover-frame">
+          <div class="cover-content">
+            <p class="cover-kicker">Bovine Production</p>
+            <div class="cover-line"></div>
+            <h1 class="cover-title">Chapter&nbsp;I</h1>
+            <p class="cover-main">Introduction to Bovine Production</p>
+            <div class="cover-line short"></div>
+            <p class="cover-sub">Ethnology, Breeds &amp;<br>Biological Conversion</p>
+
+            <svg class="orn" viewBox="0 0 120 120" fill="none">
+              <circle cx="60" cy="60" r="44" stroke="currentColor" stroke-width=".8" opacity=".55"/>
+              <circle cx="60" cy="60" r="35" stroke="currentColor" stroke-width=".5" opacity=".35"/>
+              <path d="M60 18 L66.5 53.5 L102 60 L66.5 66.5 L60 102 L53.5 66.5 L18 60 L53.5 53.5 Z"
+                    stroke="currentColor" stroke-width="1" opacity=".85"/>
+              <circle cx="60" cy="60" r="4.2" fill="currentColor" opacity=".85"/>
+              <circle cx="60" cy="60" r="1.6" fill="#0b1a2c"/>
+            </svg>
+
+            <p class="cover-foot">Volume I &middot; An Illustrated Study</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- BACK — PAGE 2 -->
+      <div class="face back page">
+        <div class="run-head"><span>Chapter I</span><span>Introduction</span></div>
+        <div class="page-body">
+          <div class="chapter-num">I</div>
+          <h1 class="p-title">Introduction to Bovine Production</h1>
+          <p class="p-sub">Ethnology &middot; Breeds &middot; Biological Conversion</p>
+          <div class="p-rule"><span>&#10022;</span></div>
+
+          <div class="abstract">
+            <p><strong>Bovine Production &amp; Ethnology:</strong> Bovine production is the
+              scientific and technical discipline that studies all aspects of raising,
+              feeding, managing, and improving domestic cattle. The ultimate goal is to
+              transform plant biomass into valuable animal products through sustainable
+              systems, recognizing the cow as an exceptional biological converter of
+              cellulose.</p>
+          </div>
+
+          <div class="pullquote" style="margin-top:34px;">
+            <p>&ldquo;The cow is not merely a livestock animal &mdash; she is a living
+              fermentation vat, a walking bridge between sun, soil and sustenance.&rdquo;</p>
+            <span>Prologue</span>
+          </div>
+        </div>
+        <div class="page-foot"><span class="pnum">2</span></div>
+      </div>
+    </div>
+
+    <!-- ============ LEAF 1 : Page 3  |  Page 4 ============ -->
+    <div class="leaf" data-i="1">
+
+      <!-- FRONT — PAGE 3 -->
+      <div class="face front page">
+        <div class="run-head"><span>Foundations</span><span>Bovine Sector</span></div>
+        <div class="page-body">
+          <h2 class="sec-title">Foundations of the Bovine Sector</h2>
+          <div class="sec-rule"></div>
+
+          <div class="card">
+            <div class="card-num">1</div>
+            <h3>Biological Conversion</h3>
+            <p><strong>Rumen Fermentation Mechanism:</strong> Ruminants possess a
+              specialized four-chambered stomach capable of cellulose degradation.
+              Through microbial fermentation, they convert fibrous forages into volatile
+              fatty acids (VFAs), supplying up to 70% of the animal&rsquo;s energy needs.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-num">2</div>
+            <h3>Evolution &amp; Ethnology</h3>
+            <p><strong>Zoological Classification:</strong> Tracing origins from the wild
+              aurochs, cattle diverged into temperate <em>Bos taurus</em> and heat-adapted
+              <em>Bos indicus</em>. Ethnology studies this genetic diversity, guiding
+              selection programs and the conservation of invaluable local genetic
+              resources.</p>
+          </div>
+        </div>
+        <div class="page-foot"><span class="pnum">3</span></div>
+      </div>
+
+      <!-- BACK — PAGE 4 -->
+      <div class="face back page">
+        <div class="run-head"><span>Foundations</span><span>Breed Typology</span></div>
+        <div class="page-body">
+          <div class="card" style="margin-top:6px;">
+            <div class="card-num">3</div>
+            <h3>Breed Classification</h3>
+            <p><strong>Production Orientation:</strong> Breeds are categorized by
+              functional use. Dairy types (<em>Holstein</em>) prioritize lactation, beef
+              types (<em>Charolais</em>) maximize muscle mass, and local rustic breeds
+              (<em>Brune de l&rsquo;Atlas</em>) ensure absolute resilience to climatic
+              stress and feed scarcity.</p>
+          </div>
+
+          <div class="pullquote">
+            <p>&ldquo;Every breed is an archive &mdash; a record of climate, culture and
+              centuries of patient selection.&rdquo;</p>
+            <span>Ethnology</span>
+          </div>
+
+          <div class="closing">
+            In the <strong>Algerian context</strong>, mastering bovine ethnology means
+            understanding both the biological diversity and cultural practices that shape
+            livestock evolution &mdash; bridging traditional extensive systems in the
+            Sahara and steppe with modern peri-urban farming.
+          </div>
+        </div>
+        <div class="page-foot"><span class="pnum">4</span></div>
+      </div>
+    </div>
+
+    <!-- ============ LEAF 2 : Page 5  |  Back cover ============ -->
+    <div class="leaf" data-i="2">
+
+      <!-- FRONT — PAGE 5 -->
+      <div class="face front page">
+        <div class="run-head"><span>Summary</span><span>Key Takeaways</span></div>
+        <div class="page-body">
+          <h2 class="sec-title">Key Takeaways</h2>
+          <div class="sec-rule"></div>
+
+          <ul class="takeaways">
+            <li><strong>The rumen is a fermentation vat.</strong> Microbes unlock energy
+              from cellulose that humans cannot digest &mdash; up to 70% of the
+              animal&rsquo;s energy arrives as volatile fatty acids.</li>
+
+            <li><strong>Two great lineages.</strong> <em>Bos taurus</em> for temperate
+              climates, <em>Bos indicus</em> for heat &mdash; each carrying distinct
+              production strengths and adaptive traits.</li>
+
+            <li><strong>Breed choice is strategy.</strong> Dairy types for lactation,
+              beef types for muscle mass, rustic local breeds for absolute resilience.</li>
+
+            <li><strong>Ethnology is the key.</strong> Genetic diversity, cultural
+              practice and selection history together determine what a herd can become.</li>
+
+            <li><strong>The Algerian bridge.</strong> Saharan and steppe extensive systems
+              meet modern peri-urban farming &mdash; a single, evolving sector.</li>
+          </ul>
+
+          <div class="p-rule" style="margin-top:30px;"><span>&#10022;</span></div>
+        </div>
+        <div class="page-foot"><span class="pnum">5</span></div>
+      </div>
+
+      <!-- BACK — BACK COVER -->
+      <div class="face back backcover">
+        <div class="backcover-inner">
+          <p class="fin">FIN</p>
+          <p class="fin-sub">Chapter One &middot; Complete</p>
+          <p class="fin-quote">&ldquo;To understand the cow is to understand how the sun
+            becomes supper.&rdquo;</p>
+          <div class="fin-rule"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===================== HUD ===================== -->
+<div class="hint" id="hint">Click a page &nbsp;&middot;&nbsp; Drag &nbsp;&middot;&nbsp; Use &larr; &rarr;</div>
+
+<div class="hud">
+  <button class="nav" id="prevBtn" aria-label="Previous page">&#8249;</button>
+  <div class="dots" id="dots"></div>
+  <button class="nav" id="nextBtn" aria-label="Next page">&#8250;</button>
+</div>
+
+<div class="rotate-hint" id="rotateHint">
+  <div>
+    <span class="rh-icon">&#128241;</span>
+    <p>Rotate your device<br>for the full spread</p>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   STATE
+   ============================================================ */
+const book   = document.getElementById('book');
+const scene  = document.getElementById('scene');
+const leaves = Array.from(document.querySelectorAll('.leaf'));
+const N      = leaves.length;          // 3 leaves -> 4 states (0..3)
+const DUR    = 920;                    // must match CSS transition
+const HALF   = DUR * 0.5;
+
+let cur        = 0;      // number of flipped leaves
+let animating  = false;
+let soundOn    = true;
+
+/* ============================================================
+   Z-INDEX MANAGEMENT
+   ============================================================ */
+function setZ(leaf, i, flipped){
+  leaf.style.zIndex = flipped ? (i + 1) : (N - i);
+}
+leaves.forEach((leaf, i) => setZ(leaf, i, false));
+
+/* ============================================================
+   UI SYNC
+   ============================================================ */
+const dotsEl  = document.getElementById('dots');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+
+for (let i = 0; i <= N; i++){
+  const b = document.createElement('button');
+  b.className = 'dot-btn';
+  b.setAttribute('aria-label', 'Go to state ' + i);
+  b.addEventListener('click', () => goto(i));
+  dotsEl.appendChild(b);
+}
+const dotEls = Array.from(dotsEl.children);
+
+function updateUI(){
+  dotEls.forEach((d, i) => d.classList.toggle('on', i === cur));
+  prevBtn.disabled = cur === 0;
+  nextBtn.disabled = cur === N;
+}
+
+/* ============================================================
+   FLIP ENGINE
+   ============================================================ */
+function flipLeaf(i, forward){
+  const leaf = leaves[i];
+  if (forward){
+    leaf.style.zIndex = 500;                     // ride on top
+    leaf.classList.add('flipped');
+    setTimeout(() => setZ(leaf, i, true), HALF); // settle underneath
+  } else {
+    leaf.style.zIndex = 500;
+    leaf.classList.remove('flipped');
+    setTimeout(() => setZ(leaf, i, false), HALF);
+  }
+}
+
+function next(){
+  if (animating || cur >= N) return;
+  animating = true;
+  playFlipSound(true);
+  flipLeaf(cur, true);
+  cur++;
+  updateUI();
+  setTimeout(() => { animating = false; }, DUR + 40);
+}
+
+function prev(){
+  if (animating || cur <= 0) return;
+  animating = true;
+  playFlipSound(false);
+  cur--;
+  flipLeaf(cur, false);
+  updateUI();
+  setTimeout(() => { animating = false; }, DUR + 40);
+}
+
+function goto(target){
+  if (animating || target === cur) return;
+  const step = target > cur ? 1 : -1;
+  const run = () => {
+    if (cur === target){ animating = false; return; }
+    animating = true;
+    step > 0 ? next() : prev();
+    setTimeout(run, DUR + 90);
+  };
+  run();
+}
+
+prevBtn.addEventListener('click', prev);
+nextBtn.addEventListener('click', next);
+
+/* ============================================================
+   POINTER — click zones + swipe
+   ============================================================ */
+let downX = null, downY = null, wasDrag = false;
+
+scene.addEventListener('pointerdown', e => {
+  downX = e.clientX; downY = e.clientY; wasDrag = false;
+});
+
+scene.addEventListener('pointerup', e => {
+  if (downX === null) return;
+  const dx = e.clientX - downX;
+  const dy = e.clientY - downY;
+  downX = null;
+
+  if (Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy)){
+    wasDrag = true;
+    dx < 0 ? next() : prev();
+  } else if (Math.abs(dx) < 12 && Math.abs(dy) < 12){
+    wasDrag = false;
+  } else {
+    wasDrag = true;
+  }
+});
+
+scene.addEventListener('click', e => {
+  if (wasDrag){ wasDrag = false; return; }
+  const r = book.getBoundingClientRect();
+  const mid = r.left + r.width / 2;
+  e.clientX > mid ? next() : prev();
+});
+
+/* keyboard */
+window.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown'){ e.preventDefault(); next(); }
+  if (e.key === 'ArrowLeft'  || e.key === 'PageUp'){ e.preventDefault(); prev(); }
+  if (e.key === 'Home'){ e.preventDefault(); goto(0); }
+  if (e.key === 'End'){ e.preventDefault(); goto(N); }
+});
+
+/* ============================================================
+   PAGE-TURN SOUND (synthesised — no files)
+   ============================================================ */
+let audioCtx = null;
+const soundBtn = document.getElementById('soundBtn');
+
+soundBtn.addEventListener('click', () => {
+  soundOn = !soundOn;
+  soundBtn.classList.toggle('off', !soundOn);
+  if (soundOn) ensureAudio();
+});
+
+function ensureAudio(){
+  if (!audioCtx){
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if (AC) audioCtx = new AC();
+  }
+  if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+}
+
+function playFlipSound(forward){
+  if (!soundOn) return;
+  ensureAudio();
+  if (!audioCtx) return;
+
+  const now = audioCtx.currentTime;
+  const dur = 0.42;
+
+  /* --- paper rustle : shaped noise through a sweeping band-pass --- */
+  const len = Math.floor(audioCtx.sampleRate * dur);
+  const buf = audioCtx.createBuffer(1, len, audioCtx.sampleRate);
+  const d   = buf.getChannelData(0);
+  for (let i = 0; i < len; i++){
+    const t = i / len;
+    d[i] = (Math.random() * 2 - 1) * Math.pow(1 - t, 2.4) * (0.35 + 0.65 * Math.sin(t * Math.PI));
+  }
+
+  const src = audioCtx.createBufferSource();
+  src.buffer = buf;
+
+  const bp = audioCtx.createBiquadFilter();
+  bp.type = 'bandpass';
+  bp.Q.value = 0.9;
+  bp.frequency.setValueAtTime(forward ? 900 : 1500, now);
+  bp.frequency.exponentialRampToValueAtTime(forward ? 2900 : 800, now + dur * 0.75);
+
+  const hp = audioCtx.createBiquadFilter();
+  hp.type = 'highpass';
+  hp.frequency.value = 380;
+
+  const g = audioCtx.createGain();
+  g.gain.setValueAtTime(0.0001, now);
+  g.gain.exponentialRampToValueAtTime(0.16, now + 0.05);
+  g.gain.exponentialRampToValueAtTime(0.0001, now + dur);
+
+  src.connect(bp).connect(hp).connect(g).connect(audioCtx.destination);
+  src.start(now);
+
+  /* --- soft low "thump" as the page lands --- */
+  const osc = audioCtx.createOscillator();
+  const og  = audioCtx.createGain();
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(150, now + dur * 0.72);
+  osc.frequency.exponentialRampToValueAtTime(62, now + dur * 0.95);
+  og.gain.setValueAtTime(0.0001, now + dur * 0.70);
+  og.gain.exponentialRampToValueAtTime(0.07, now + dur * 0.78);
+  og.gain.exponentialRampToValueAtTime(0.0001, now + dur * 1.05);
+  osc.connect(og).connect(audioCtx.destination);
+  osc.start(now + dur * 0.70);
+  osc.stop(now + dur * 1.1);
+}
+
+/* ============================================================
+   FITTING / SCALE
+   ============================================================ */
+const BW = 960, BH = 680;
+function fit(){
+  const vw = window.innerWidth;
+  const vh = window.innerHeight;
+  const s = Math.min((vw * 0.94) / BW, (vh * 0.80) / BH, 1.34);
+  document.documentElement.style.setProperty('--s', s.toFixed(3));
+
+  const hint = document.getElementById('rotateHint');
+  const portraitPhone = vw < 720 && vh > vw;
+  hint.classList.toggle('show', portraitPhone);
+}
+window.addEventListener('resize', fit);
+fit();
+
+/* ============================================================
+   MOUSE PARALLAX
+   ============================================================ */
+let tx = 0, ty = 0, cx = 0, cy = 0;
+window.addEventListener('pointermove', e => {
+  const nx = (e.clientX / window.innerWidth  - 0.5) * 2;
+  const ny = (e.clientY / window.innerHeight - 0.5) * 2;
+  tx =  nx * 5.5;
+  ty = -ny * 4.0;
+});
+
+(function loop(){
+  cx += (tx - cx) * 0.07;
+  cy += (ty - cy) * 0.07;
+  book.style.setProperty('--ry', cx.toFixed(2) + 'deg');
+  book.style.setProperty('--rx', cy.toFixed(2) + 'deg');
+  requestAnimationFrame(loop);
+})();
+
+/* ============================================================
+   DUST PARTICLES
+   ============================================================ */
+(function dust(){
+  const cvs = document.getElementById('dust');
+  const ctx = cvs.getContext('2d');
+  let W, H, parts = [];
+  const COUNT = 70;
+
+  function resize(){
+    W = cvs.width  = window.innerWidth  * devicePixelRatio;
+    H = cvs.height = window.innerHeight * devicePixelRatio;
+    cvs.style.width  = window.innerWidth + 'px';
+    cvs.style.height = window.innerHeight + 'px';
+  }
+
+  function make(){
+    return {
+      x: Math.random() * W,
+      y: Math.random() * H,
+      r: (Math.random() * 1.5 + 0.35) * devicePixelRatio,
+      vx: (Math.random() - 0.5) * 0.16 * devicePixelRatio,
+      vy: -(Math.random() * 0.22 + 0.05) * devicePixelRatio,
+      a: Math.random() * 0.5 + 0.10,
+      ph: Math.random() * Math.PI * 2
+    };
+  }
+
+  function init(){ parts = Array.from({length: COUNT}, make); }
+
+  function tick(t){
+    ctx.clearRect(0, 0, W, H);
+    for (const p of parts){
+      p.x += p.vx + Math.sin(t * 0.0006 + p.ph) * 0.22 * devicePixelRatio;
+      p.y += p.vy;
+      if (p.y < -12) { p.y = H + 12; p.x = Math.random() * W; }
+      if (p.x < -12) p.x = W + 12;
+      if (p.x > W + 12) p.x = -12;
+
+      const glow = 0.55 + 0.45 * Math.sin(t * 0.0016 + p.ph);
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(224,199,124,' + (p.a * glow) + ')';
+      ctx.shadowBlur = 10 * devicePixelRatio;
+      ctx.shadowColor = 'rgba(224,199,124,.55)';
+      ctx.fill();
+    }
+    requestAnimationFrame(tick);
+  }
+
+  resize(); init(); requestAnimationFrame(tick);
+  window.addEventListener('resize', () => { resize(); init(); });
+})();
+
+/* ============================================================
+   BOOT
+   ============================================================ */
+updateUI();
+
+/* first interaction unlocks audio context */
+window.addEventListener('pointerdown', ensureAudio, { once: true });
+window.addEventListener('keydown', ensureAudio, { once: true });
+</script>
+</body>
+</html>
