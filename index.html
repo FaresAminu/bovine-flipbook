@@ -12,9 +12,8 @@
    RESET & ATMOSPHERE
    ============================================================ */
 *{box-sizing:border-box;}
-html,body{height:100%;margin:0;}
+html,body{height:100%;margin:0;overflow:hidden;}
 body{
-  overflow:hidden;
   font-family:'Inter','Helvetica Neue',Helvetica,Arial,sans-serif;
   color:#dfe7f0;
   background:
@@ -108,13 +107,12 @@ body{
 @keyframes hintPulse{0%,100%{opacity:.45;}50%{opacity:.95;}}
 
 /* ============================================================
-   STAGE & BOOK
+   STAGE & BOOK — FULL BLEED
    ============================================================ */
 .scene{
-  position:fixed;
-  top:70px; bottom:88px; left:0; right:0;
-  z-index:10;
+  position:fixed;inset:0;z-index:10;
   display:grid;place-items:center;
+  overflow:hidden;
   perspective:3000px;
   perspective-origin:50% 50%;
 }
@@ -188,7 +186,6 @@ body{
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.42'/%3E%3C/svg%3E");
   opacity:.30;mix-blend-mode:multiply;
 }
-/* spine shading */
 .face.front.page{box-shadow:inset 30px 0 44px -26px rgba(30,58,95,.34), inset 0 0 0 1px rgba(0,0,0,.05);}
 .face.back.page{box-shadow:inset -30px 0 44px -26px rgba(30,58,95,.34), inset 0 0 0 1px rgba(0,0,0,.05);}
 
@@ -669,7 +666,7 @@ const N      = leaves.length;          // 3 leaves -> 4 states (0..3)
 const DUR    = 920;                    // must match CSS transition
 const HALF   = DUR * 0.5;
 
-let cur        = 0;      // number of flipped leaves
+let cur        = 0;
 let animating  = false;
 let soundOn    = true;
 
@@ -709,9 +706,9 @@ function updateUI(){
 function flipLeaf(i, forward){
   const leaf = leaves[i];
   if (forward){
-    leaf.style.zIndex = 500;                     // ride on top
+    leaf.style.zIndex = 500;
     leaf.classList.add('flipped');
-    setTimeout(() => setZ(leaf, i, true), HALF); // settle underneath
+    setTimeout(() => setZ(leaf, i, true), HALF);
   } else {
     leaf.style.zIndex = 500;
     leaf.classList.remove('flipped');
@@ -795,7 +792,7 @@ window.addEventListener('keydown', e => {
 });
 
 /* ============================================================
-   PAGE-TURN SOUND (synthesised — no files)
+   PAGE-TURN SOUND
    ============================================================ */
 let audioCtx = null;
 const soundBtn = document.getElementById('soundBtn');
@@ -822,7 +819,6 @@ function playFlipSound(forward){
   const now = audioCtx.currentTime;
   const dur = 0.42;
 
-  /* --- paper rustle : shaped noise through a sweeping band-pass --- */
   const len = Math.floor(audioCtx.sampleRate * dur);
   const buf = audioCtx.createBuffer(1, len, audioCtx.sampleRate);
   const d   = buf.getChannelData(0);
@@ -852,7 +848,6 @@ function playFlipSound(forward){
   src.connect(bp).connect(hp).connect(g).connect(audioCtx.destination);
   src.start(now);
 
-  /* --- soft low "thump" as the page lands --- */
   const osc = audioCtx.createOscillator();
   const og  = audioCtx.createGain();
   osc.type = 'sine';
@@ -867,14 +862,14 @@ function playFlipSound(forward){
 }
 
 /* ============================================================
-   FITTING / SCALE
+   FITTING / SCALE — FULL BLEED COVER
    ============================================================ */
 const BW = 960, BH = 680;
 function fit(){
-  const r  = scene.getBoundingClientRect();
-  const vw = r.width;
-  const vh = r.height;
-  const s  = Math.min((vw * 0.96) / BW, (vh * 0.98) / BH, 1.34);
+  const vw = window.innerWidth;
+  const vh = window.innerHeight;
+  /* cover: use max so book bleeds edge-to-edge, no void anywhere */
+  const s = Math.max(vw / BW, vh / BH);
   document.documentElement.style.setProperty('--s', s.toFixed(3));
 
   const hint = document.getElementById('rotateHint');
@@ -885,14 +880,14 @@ window.addEventListener('resize', fit);
 fit();
 
 /* ============================================================
-   MOUSE PARALLAX
+   MOUSE PARALLAX (gentle so it stays centered)
    ============================================================ */
 let tx = 0, ty = 0, cx = 0, cy = 0;
 window.addEventListener('pointermove', e => {
   const nx = (e.clientX / window.innerWidth  - 0.5) * 2;
   const ny = (e.clientY / window.innerHeight - 0.5) * 2;
   tx =  nx * 3.0;
-ty = -ny * 2.2;
+  ty = -ny * 2.2;
 });
 
 (function loop(){
@@ -961,8 +956,6 @@ ty = -ny * 2.2;
    BOOT
    ============================================================ */
 updateUI();
-
-/* first interaction unlocks audio context */
 window.addEventListener('pointerdown', ensureAudio, { once: true });
 window.addEventListener('keydown', ensureAudio, { once: true });
 </script>
